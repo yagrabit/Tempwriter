@@ -113,11 +113,26 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
 
-  /* Glassmorphism Variables Dark */
-  --glass-bg: rgba(20, 20, 30, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+@layer utilities {
+  .a4-paper {
+    width: 100%;
+    max-width: 210mm;
+    /* A4 Width */
+    min-height: 297mm;
+    /* A4 Height */
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .dark .a4-paper {
+    background-color: #18181B;
+    /* Zinc 900 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 @layer base {
@@ -126,7 +141,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#F3F4F6] text-foreground dark:bg-[#09090B];
   }
 
   /* Modern Scrollbar - Light Mode Default */

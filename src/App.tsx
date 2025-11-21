@@ -36,7 +36,7 @@ function App() {
     content: '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[calc(100vh-200px)] p-8 dark:prose-invert bg-white/80 dark:bg-white/5 rounded-xl shadow-sm border border-black/5 dark:border-white/5',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[297mm] p-12 dark:prose-invert',
       },
     },
     onUpdate: ({ editor }) => {
@@ -107,7 +107,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
+    <div className="min-h-screen flex flex-col items-center py-8 sm:py-12 px-4">
       <input
         type="file"
         ref={fileInputRef}
@@ -116,18 +116,24 @@ function App() {
         className="hidden"
       />
 
-      {/* Main Editor Card */}
-      <div className="w-full max-w-4xl h-[85vh] glass-panel rounded-2xl flex flex-col relative overflow-hidden transition-all duration-300">
-
-        {/* Floating Toolbar Container */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-          <Toolbar editor={editor} onOpenCommand={() => setIsCommandOpen(true)} />
-        </div>
+      {/* A4 Paper Container */}
+      <div className="a4-paper rounded-sm relative transition-all duration-300 flex flex-col">
 
         {/* Editor Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1">
           <EditorContent editor={editor} />
         </div>
+
+        {/* Floating Toolbar Container - Positioned relative to viewport or paper? 
+            Let's keep it fixed to viewport bottom for easy access, or sticky at bottom of paper?
+            User asked for "floating toolbar at the bottom" in the prompt. 
+            Let's keep it fixed to viewport for now as it's most usable.
+        */}
+      </div>
+
+      {/* Fixed Toolbar */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+        <Toolbar editor={editor} onOpenCommand={() => setIsCommandOpen(true)} />
       </div>
 
       {/* Command Palette Hint */}
