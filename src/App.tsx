@@ -1,15 +1,14 @@
-import { Editor } from '@/components/editor/Editor'
-import { useEditor } from '@tiptap/react'
+import { useState, useEffect, useRef } from 'react'
+import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Markdown } from 'tiptap-markdown'
 import Highlight from '@tiptap/extension-highlight'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { common, createLowlight } from 'lowlight'
-import { useEffect, useRef } from 'react'
-import { Button } from '@/components/ui/button'
-import { Download, Upload, Moon, Sun } from 'lucide-react'
-
+import { Toolbar } from '@/components/editor/Toolbar'
+import { CommandPalette } from '@/components/editor/CommandPalette'
 import { MermaidExtension } from '@/components/editor/extensions/MermaidExtension'
+import { MermaidBuilder } from '@/components/editor/MermaidBuilder'
 
 // Setup lowlight for syntax highlighting
 const lowlight = createLowlight(common)
@@ -19,6 +18,8 @@ const THEME_KEY = 'tempwriter_theme'
 
 function App() {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isCommandOpen, setIsCommandOpen] = useState(false)
+  const [showMermaidBuilder, setShowMermaidBuilder] = useState(false)
 
   const editor = useEditor({
     extensions: [
@@ -35,7 +36,7 @@ function App() {
     content: '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[calc(100vh-200px)] p-4 dark:prose-invert',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[calc(100vh-200px)] p-8',
       },
     },
     onUpdate: ({ editor }) => {
@@ -44,20 +45,20 @@ function App() {
     },
   })
 
-  // Load content
+  // Load content from localStorage
   useEffect(() => {
-    if (editor) {
-      const savedContent = localStorage.getItem(STORAGE_KEY)
-      if (savedContent) {
-        editor.commands.setContent(savedContent)
-      }
+    const savedContent = localStorage.getItem(STORAGE_KEY)
+    if (savedContent && editor) {
+      editor.commands.setContent(savedContent)
     }
   }, [editor])
 
-  // Theme handling
+  // Theme Management
   useEffect(() => {
     const savedTheme = localStorage.getItem(THEME_KEY)
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    const isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+    if (isDark) {
       document.documentElement.classList.add('dark')
     } else {
       document.documentElement.classList.remove('dark')
@@ -97,41 +98,58 @@ function App() {
       localStorage.setItem(STORAGE_KEY, content)
     }
     reader.readAsText(file)
-    // Reset input
-    event.target.value = ''
+  }
+
+  const handleInsertDiagram = () => {
+    // In a real implementation, we might pass the type to the builder
+    // For now, we just open the builder which has the templates
+    setShowMermaidBuilder(true)
   }
 
   return (
-    <div className="min-h-screen bg-background font-sans antialiased flex flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between px-4">
-          <div className="flex items-center space-x-2">
-            <span className="font-bold text-lg">Tempwriter</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              accept=".md,.txt"
-              className="hidden"
-            />
-            <Button variant="ghost" size="icon" onClick={handleImportClick} title="Import Markdown">
-              <Upload className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleExport} title="Export Markdown">
-              <Download className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            </Button>
-          </div>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept=".md,.txt"
+        className="hidden"
+      />
+
+      {/* Main Editor Card */}
+      <div className="w-full max-w-4xl h-[85vh] glass-panel rounded-2xl flex flex-col relative overflow-hidden transition-all duration-300">
+
+        {/* Floating Toolbar Container */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
+          <Toolbar editor={editor} onOpenCommand={() => setIsCommandOpen(true)} />
         </div>
-      </header>
-      <main className="flex-1 flex flex-col container mx-auto">
-        <Editor editor={editor} />
-      </main>
+
+        {/* Editor Area */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <EditorContent editor={editor} />
+        </div>
+      </div>
+
+      {/* Command Palette Hint */}
+      <div className="fixed bottom-4 right-4 text-xs text-muted-foreground/50 pointer-events-none">
+        Press <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"><span className="text-xs">⌘</span>K</kbd> to open commands
+      </div>
+
+      <CommandPalette
+        editor={editor}
+        open={isCommandOpen}
+        onOpenChange={setIsCommandOpen}
+        onThemeToggle={toggleTheme}
+        onExport={handleExport}
+        onImportClick={handleImportClick}
+        onInsertDiagram={handleInsertDiagram}
+      />
+
+      <MermaidBuilder
+        editor={editor}
+        isOpen={showMermaidBuilder}
+        onClose={() => setShowMermaidBuilder(false)}
+      />
     </div>
   )
 }
