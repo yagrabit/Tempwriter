@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
-import { MermaidBlock } from '../MermaidBlock'
+import { MermaidBlock } from '../MermaidBlock.tsx'
 
 export const MermaidExtension = Node.create({
     name: 'mermaid',
