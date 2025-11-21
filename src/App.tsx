@@ -9,6 +9,8 @@ import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Download, Upload, Moon, Sun } from 'lucide-react'
 
+import { MermaidExtension } from '@/components/editor/extensions/MermaidExtension'
+
 // Setup lowlight for syntax highlighting
 const lowlight = createLowlight(common)
 
@@ -28,6 +30,7 @@ function App() {
       CodeBlockLowlight.configure({
         lowlight,
       }),
+      MermaidExtension,
     ],
     content: '',
     editorProps: {
