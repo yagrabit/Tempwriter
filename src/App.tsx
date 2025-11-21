@@ -125,7 +125,7 @@ function App() {
         </div>
 
         {/* Editor Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <div className="flex-1 overflow-y-auto">
           <EditorContent editor={editor} />
         </div>
       </div>
