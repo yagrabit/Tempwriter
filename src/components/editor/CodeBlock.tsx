@@ -50,7 +50,7 @@ export function CodeBlock({ node: { attrs }, updateAttributes }: CodeBlockProps)
     const [value, setValue] = useState(attrs.language || 'javascript')
 
     return (
-        <NodeViewWrapper className="code-block relative group my-4 rounded-md border bg-muted/50">
+        <NodeViewWrapper className="code-block relative group my-4">
             <div className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
