@@ -36,7 +36,7 @@ function App() {
     content: '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[calc(100vh-200px)] p-8 dark:prose-invert',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[calc(100vh-200px)] p-8 dark:prose-invert bg-white/80 dark:bg-white/5 rounded-xl shadow-sm border border-black/5 dark:border-white/5',
       },
     },
     onUpdate: ({ editor }) => {
