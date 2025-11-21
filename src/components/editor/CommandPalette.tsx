@@ -64,6 +64,10 @@ export function CommandPalette({
     const runCommand = (command: () => void) => {
         command()
         onOpenChange(false)
+        // Restore focus to editor after dialog closes
+        setTimeout(() => {
+            editor?.commands.focus()
+        }, 100)
     }
 
     if (!editor) return null

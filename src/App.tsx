@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, ReactNodeViewRenderer } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Markdown } from 'tiptap-markdown'
 import Highlight from '@tiptap/extension-highlight'
@@ -7,6 +7,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { common, createLowlight } from 'lowlight'
 import { Toolbar } from '@/components/editor/Toolbar'
 import { CommandPalette } from '@/components/editor/CommandPalette'
+import { CodeBlock } from './components/editor/CodeBlock'
 import { MermaidExtension } from '@/components/editor/extensions/MermaidExtension'
 import { MermaidBuilder } from '@/components/editor/MermaidBuilder'
 
@@ -28,9 +29,11 @@ function App() {
       }),
       Markdown,
       Highlight,
-      CodeBlockLowlight.configure({
-        lowlight,
-      }),
+      CodeBlockLowlight.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(CodeBlock)
+        },
+      }).configure({ lowlight }),
       MermaidExtension,
     ],
     content: '',
