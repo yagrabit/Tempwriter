@@ -39,7 +39,7 @@ function App() {
     content: '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[297mm] p-12 dark:prose-invert',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[297mm] p-4 md:p-12 dark:prose-invert',
       },
     },
     onUpdate: ({ editor }) => {
@@ -135,7 +135,7 @@ function App() {
       </div>
 
       {/* Fixed Toolbar */}
-      <div className="fixed bottom-6 right-6 z-50 md:left-1/2 md:right-auto md:-translate-x-1/2">
+      <div className="fixed bottom-6 left-6 z-50 md:left-1/2 md:right-auto md:-translate-x-1/2">
         <Toolbar editor={editor} onOpenCommand={() => setIsCommandOpen(true)} />
       </div>
 
