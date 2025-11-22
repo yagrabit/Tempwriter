@@ -32,7 +32,21 @@ export function Toolbar({ editor, onOpenCommand }: ToolbarProps) {
 
     return (
         <>
-            <div className="glass-panel rounded-full p-1 flex items-center gap-1 shadow-lg backdrop-blur-xl bg-background/50 border border-white/20">
+            {/* Mobile FAB */}
+            {onOpenCommand && (
+                <Button
+                    variant="default"
+                    size="icon"
+                    className="flex md:hidden h-14 w-14 rounded-full shadow-xl bg-primary text-primary-foreground hover:scale-105 transition-transform"
+                    onClick={onOpenCommand}
+                    title="Command Palette"
+                >
+                    <Command className="h-6 w-6" />
+                </Button>
+            )}
+
+            {/* Desktop Toolbar */}
+            <div className="hidden md:flex glass-panel rounded-full p-1 items-center gap-1 shadow-lg backdrop-blur-xl bg-background/50 border border-white/20">
                 <Button
                     variant={editor.isActive('bold') ? 'secondary' : 'ghost'}
                     size="icon"

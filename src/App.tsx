@@ -135,7 +135,7 @@ function App() {
       </div>
 
       {/* Fixed Toolbar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+      <div className="fixed bottom-6 right-6 z-50 md:left-1/2 md:right-auto md:-translate-x-1/2">
         <Toolbar editor={editor} onOpenCommand={() => setIsCommandOpen(true)} />
       </div>
 
